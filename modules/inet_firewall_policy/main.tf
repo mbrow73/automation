@@ -7,20 +7,15 @@ resource "google_compute_network_firewall_policy" "this" {
 
 
 resource "google_compute_network_firewall_policy_rule" "rule" {
-  for_each = { for r in var.firewall_rules : r.name => r }
+  for_each = { for r in var.inet_firewall_rules : r.name => r }
   firewall_policy  = google_compute_network_firewall_policy.this.id
   description      = each.value.description
   priority         = each.value.priority
   direction        = each.value.direction
   action           = each.value.action
   enable_logging   = each.value.enable_logging
-  tls_inspect      = each.value.tls_inspect
 
-  # Only set the profile if the action requires it:
-  dynamic "security_profile_group" {
-    for_each = each.value.action == "apply_security_profile_group" ? [each.value.security_profile_group] : []
-    content  = security_profile_group.value
-  }
+
 
   # Match block for L4:
   match {
@@ -40,6 +35,6 @@ resource "google_compute_network_firewall_policy_rule" "rule" {
 # Associate the firewall policy with a VPC network (environment-specific network)
 resource "google_compute_network_firewall_policy_association" "attach_vpc" {
   name = "inet"
-  attachment_target = var.vpc_network_id   # The target network (self-link or name)
+  attachment_target = var.inet_vpc_id   # The target network (self-link or name)
   firewall_policy   = google_compute_network_firewall_policy.this.id
 }

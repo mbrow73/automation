@@ -8,17 +8,12 @@ variable "policy_name" {
   type        = string
 }
 
-variable "security_profile_group_id" {
-  description = "ID of the security profile group to apply in rules"
-  type        = string
-}
-
-variable "vpc_network_id" {
+variable "inet_vpc_id" {
   description = "The target VPC network (self-link or name) to attach the policy"
   type        = string
 }
 
-variable "firewall_rules" {
+variable "inet_firewall_rules" {
   description = <<-EOT
     A list of firewall‐policy rules to create.  
     Each object must include:
@@ -40,12 +35,10 @@ variable "firewall_rules" {
     priority               = number
     direction              = string
     action                 = string
-    security_profile_group = optional(string)
     enable_logging         = bool
     src_ip_ranges          = list(string)
     dest_ip_ranges         = list(string)
     ports                  = list(string)
     protocol               = string
-    tls_inspection         = bool
   }))
 }
