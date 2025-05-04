@@ -12,7 +12,7 @@ variable "project_id" {
 variable "inet_vpc_id" {
   description = "VPC ID for the Internet VPC"
   type        = string
-  default     = "default"
+  default     = "projects/backends-454520/global/networks/default"
 }
 
 variable "inet_firewall_rules" {
@@ -31,7 +31,7 @@ variable "inet_firewall_rules" {
       - ports                  = list(string)  # layer4 ports  
       - tls_inspection         = bool           # whether to decrypt TLS  
   EOT
-    type = list(object({
+    type                   = list(object({
     name                   = string
     description            = string
     priority               = number
